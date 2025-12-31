@@ -1,221 +1,295 @@
-import React, { useState, useEffect } from 'react';
-import { Fingerprint, Star, Clock, Infinity, ShieldCheck, ArrowDown, Sparkles } from 'lucide-react';
-
-const RareEdition = () => {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const [isExpired, setIsExpired] = useState(false);
-
-  useEffect(() => {
-    // تحديد وقت الهدف: الساعة 12 منتصف الليل الليلة (بداية اليوم الجديد)
-    const targetDate = new Date();
-    targetDate.setHours(24, 0, 0, 0); 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qaes & Rahaf - Rare Edition 1/1</title>
     
-    // للتحقق من المظهر بعد الانتهاء، يمكنك إلغاء التعليق عن السطر التالي وتحديث الصفحة
-    // targetDate.setSeconds(targetDate.getSeconds() + 5); 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Noto Kufi Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100;300;500;700&display=swap" rel="stylesheet">
 
-    const interval = setInterval(() => {
-      const now = new Date();
-      const difference = targetDate.getTime() - now.getTime();
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-      if (difference <= 0) {
-        clearInterval(interval);
-        setIsExpired(true);
-      } else {
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((difference / 1000 / 60) % 60);
-        const seconds = Math.floor((difference / 1000) % 60);
-        setTimeLeft({ hours, minutes, seconds });
-        setIsExpired(false);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // تنسيق الأرقام لتظهر بـ 0 في البداية إذا كانت أقل من 10
-  const formatTime = (time) => String(time).padStart(2, '0');
-
-  return (
-    <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 font-sans selection:bg-rose-900 selection:text-white overflow-x-hidden">
-      {/* Arabic Font - Noto Kufi for a modern, geometric look */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100;300;500;700&display=swap');
-        body { font-family: 'Noto Kufi Arabic', sans-serif; }
-        .glass-panel {
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+    <style>
+        body {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background-color: #0a0a0a;
+            color: #f4f4f5; /* zinc-100 */
         }
-        .text-glow {
-          text-shadow: 0 0 20px rgba(225, 29, 72, 0.5);
-        }
-        @keyframes pulse-gold {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-      `}</style>
-
-      {/* Header / Brand */}
-      <nav className="fixed w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference">
-        <div className="text-xs tracking-[0.3em] uppercase opacity-50">Qaes & Rahaf Archive</div>
-        <div className="border border-white/20 px-3 py-1 text-xs rounded-full flex items-center gap-2">
-          <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-          AUTHENTICATED 1/1
-        </div>
-      </nav>
-
-      {/* SECTION 1: The Hook (Hero) */}
-      <section className="h-screen flex flex-col justify-center items-center relative px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-900/10 via-[#0a0a0a] to-[#0a0a0a]"></div>
         
-        <div className="relative z-10 text-center space-y-6">
-          <div className="inline-block mb-4">
-            <Fingerprint className="w-12 h-12 text-rose-700 mx-auto opacity-80" strokeWidth={1} />
-          </div>
-          <h1 className="text-5xl md:text-8xl font-thin tracking-tighter text-white">
-            RAHAF
-            <span className="text-rose-700">.</span>
-          </h1>
-          <p className="text-zinc-500 text-sm md:text-base tracking-[0.2em] uppercase mt-4">
-            The Only Version Existent
-          </p>
+        /* Glass Effect */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Glow Text */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(225, 29, 72, 0.5);
+        }
+
+        /* Custom Animations */
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+
+        /* Selection Color */
+        ::selection {
+            background-color: #881337; /* rose-900 */
+            color: white;
+        }
+
+        /* LTR overrides for English text in RTL doc */
+        .ltr-text {
+            direction: ltr;
+        }
+        .rtl-text {
+            direction: rtl;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 px-8 py-6 flex justify-between items-center mix-blend-difference ltr-text">
+        <div class="text-xs tracking-[0.3em] uppercase opacity-50">Qaes & Rahaf Archive</div>
+        <div class="border border-white/20 px-3 py-1 text-xs rounded-full flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+            AUTHENTICATED 1/1
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="h-screen flex flex-col justify-center items-center relative px-6">
+        <!-- Background Gradient -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-900/10 via-[#0a0a0a] to-[#0a0a0a]"></div>
+        
+        <div class="relative z-10 text-center space-y-6 ltr-text">
+            <div class="inline-block mb-4">
+                <i data-lucide="fingerprint" class="w-12 h-12 text-rose-700 mx-auto opacity-80" stroke-width="1"></i>
+            </div>
+            <h1 class="text-5xl md:text-8xl font-thin tracking-tighter text-white">
+                RAHAF
+                <span class="text-rose-700">.</span>
+            </h1>
+            <p class="text-zinc-500 text-sm md:text-base tracking-[0.2em] uppercase mt-4">
+                The Only Version Existent
+            </p>
         </div>
 
-        <div className="absolute bottom-12 animate-bounce opacity-30">
-          <ArrowDown size={20} />
+        <div class="absolute bottom-12 animate-bounce opacity-30 text-white">
+            <i data-lucide="arrow-down" class="w-6 h-6"></i>
         </div>
-      </section>
+    </section>
 
-      {/* SECTION 2: The Narrative (Timeline) */}
-      <section className="min-h-screen py-24 px-6 md:px-24 bg-zinc-950 border-t border-white/5 relative">
-        <div className="max-w-4xl mx-auto space-y-32">
-          
-          {/* Chapter 1 */}
-          <div className="group flex flex-col md:flex-row gap-12 items-center">
-            <div className="w-full md:w-1/2 aspect-square bg-zinc-900 relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out">
-               <img 
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
-                alt="Abstract Art" 
-                className="w-full h-full object-cover opacity-60 hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute bottom-4 left-4 text-xs font-mono text-zinc-500">FIG 01. THE BEGINNING</div>
-            </div>
-            <div className="w-full md:w-1/2 space-y-6 text-right" dir="rtl">
-              <div className="flex items-center gap-3 justify-end text-rose-700 opacity-80">
-                <span className="text-xs font-bold tracking-widest uppercase">23 / 11</span>
-                <Clock size={16} />
-              </div>
-              <h2 className="text-3xl font-light text-white leading-tight">الرسالة التي غيرت كل شيء</h2>
-              <p className="text-zinc-400 font-light leading-loose text-lg">
-                في تاريخ <strong>23/11</strong>، وصلتني رسالة منكِ، ومن تلك اللحظة التي بدأنا فيها الحديث، تغير العالم. لم تكن مجرد كلمات، كانت إشارة البدء لحياة جديدة. التاريخ الذي انحفر في الذاكرة كأجمل صدفة في عمري.
-              </p>
-            </div>
-          </div>
-
-          {/* Chapter 2 */}
-          <div className="group flex flex-col md:flex-row-reverse gap-12 items-center">
-            <div className="w-full md:w-1/2 aspect-[4/5] bg-zinc-900 relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out">
-               <img 
-                src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=2544&auto=format&fit=crop" 
-                alt="Sky" 
-                className="w-full h-full object-cover opacity-60 hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute bottom-4 right-4 text-xs font-mono text-zinc-500">FIG 02. THE GOLDEN YEAR</div>
-            </div>
-            <div className="w-full md:w-1/2 space-y-6 text-right" dir="rtl">
-              <div className="flex items-center gap-3 justify-end text-rose-700 opacity-80">
-                <span className="text-xs font-bold tracking-widest uppercase">الحصاد</span>
-                <Star size={16} />
-              </div>
-              <h2 className="text-3xl font-light text-white leading-tight">سنة من الخيال</h2>
-              <p className="text-zinc-400 font-light leading-loose text-lg">
-                يا لها من سنة! كانت مليئة بالتفاصيل الحلوة التي لا تنسى. كل يوم مر معكِ كان يثبت لي كم أنا محظوظ. سنة كاملة من الضحك، والدفء، والمشاعر الحقيقية. ببساطة، كانت أحلى سنة بحياتي لأنكِ كنتِ الجزء الأكبر منها.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* SECTION 3: The Countdown / Reveal (Replaces 1/1) */}
-      <section className="min-h-[80vh] flex flex-col justify-center items-center px-6 relative overflow-hidden">
-        {/* Background Grid */}
-        <div className="absolute inset-0" 
-             style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px'}}>
-        </div>
-
-        <div className="glass-panel p-8 md:p-16 max-w-2xl w-full relative border-t border-rose-900/30 shadow-2xl shadow-rose-900/10 transition-all duration-1000">
-          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-4 py-1 border border-white/10 text-xs tracking-widest text-zinc-500 uppercase">
-            {isExpired ? 'Special Message' : 'Counting Down'}
-          </div>
-
-          <div className="text-center space-y-8 flex flex-col items-center justify-center min-h-[300px]">
+    <!-- Narrative Section -->
+    <section class="min-h-screen py-24 px-6 md:px-24 bg-zinc-950 border-t border-white/5 relative">
+        <div class="max-w-4xl mx-auto space-y-32">
             
-            {!isExpired ? (
-              // COUNTDOWN STATE
-              <>
-                <div className="flex justify-center text-rose-600 mb-2 animate-pulse">
-                  <Clock size={40} strokeWidth={1} />
+            <!-- Chapter 1 -->
+            <div class="group flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2 aspect-square bg-zinc-900 relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" 
+                         alt="Abstract Art" 
+                         class="w-full h-full object-cover opacity-60 hover:scale-105 transition-transform duration-700">
+                    <div class="absolute bottom-4 left-4 text-xs font-mono text-zinc-500 ltr-text">FIG 01. THE BEGINNING</div>
                 </div>
-                
-                <h3 className="text-zinc-400 text-sm tracking-[0.3em] uppercase">Waiting for Midnight</h3>
-                
-                <div className="flex items-end gap-4 md:gap-8 justify-center font-mono text-white">
-                  <div className="text-center">
-                    <span className="text-4xl md:text-7xl font-light">{formatTime(timeLeft.hours)}</span>
-                    <p className="text-xs text-zinc-600 mt-2 uppercase">Hours</p>
-                  </div>
-                  <span className="text-4xl md:text-7xl font-light text-rose-800 animate-pulse">:</span>
-                  <div className="text-center">
-                    <span className="text-4xl md:text-7xl font-light">{formatTime(timeLeft.minutes)}</span>
-                    <p className="text-xs text-zinc-600 mt-2 uppercase">Minutes</p>
-                  </div>
-                  <span className="text-4xl md:text-7xl font-light text-rose-800 animate-pulse">:</span>
-                  <div className="text-center">
-                    <span className="text-4xl md:text-7xl font-light text-rose-500">{formatTime(timeLeft.seconds)}</span>
-                    <p className="text-xs text-zinc-600 mt-2 uppercase">Seconds</p>
-                  </div>
+                <div class="w-full md:w-1/2 space-y-6 text-right rtl-text">
+                    <div class="flex items-center gap-3 justify-end text-rose-700 opacity-80 ltr-text">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold tracking-widest uppercase">23 / 11</span>
+                    </div>
+                    <h2 class="text-3xl font-light text-white leading-tight">الرسالة التي غيرت كل شيء</h2>
+                    <p class="text-zinc-400 font-light leading-loose text-lg">
+                        في تاريخ <strong>23/11</strong>، وصلتني رسالة منكِ، ومن تلك اللحظة التي بدأنا فيها الحديث، تغير العالم. لم تكن مجرد كلمات، كانت إشارة البدء لحياة جديدة. التاريخ الذي انحفر في الذاكرة كأجمل صدفة في عمري.
+                    </p>
                 </div>
-              </>
-            ) : (
-              // EXPIRED / REVEAL STATE
-              <div className="animate-in fade-in zoom-in duration-1000">
-                <div className="flex justify-center text-yellow-500 mb-6">
-                  <Sparkles size={50} strokeWidth={1} className="animate-spin-slow" />
-                </div>
-                
-                <h3 className="text-4xl md:text-6xl font-bold text-white tracking-wide leading-tight text-glow">
-                  كل عام وانتِ
-                  <br />
-                  بألف خير يا رهف
-                </h3>
-                
-                <p className="text-zinc-400 text-lg md:text-xl leading-relaxed max-w-md mx-auto mt-8" dir="rtl">
-                  أتمنى لكِ سنة جديدة مليئة بالسعادة والحب والنجاح.
-                  <br />
-                  شكراً لأنكِ كنتِ أجمل جزء في سنتي الماضية،
-                  <br />
-                  وكل جزء في سنتي القادمة.
-                </p>
+            </div>
 
-                <div className="mt-12 inline-block border border-rose-500/30 px-6 py-2 rounded-full bg-rose-500/10">
-                  <p className="text-rose-400 font-handwriting text-xl italic" style={{fontFamily: 'cursive'}}>Love, Qaes</p>
+            <!-- Chapter 2 -->
+            <div class="group flex flex-col md:flex-row-reverse gap-12 items-center">
+                <div class="w-full md:w-1/2 aspect-[4/5] bg-zinc-900 relative overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out">
+                    <img src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=2544&auto=format&fit=crop" 
+                         alt="Sky" 
+                         class="w-full h-full object-cover opacity-60 hover:scale-105 transition-transform duration-700">
+                    <div class="absolute bottom-4 right-4 text-xs font-mono text-zinc-500 ltr-text">FIG 02. THE GOLDEN YEAR</div>
                 </div>
-              </div>
-            )}
+                <div class="w-full md:w-1/2 space-y-6 text-right rtl-text">
+                    <div class="flex items-center gap-3 justify-end text-rose-700 opacity-80 ltr-text">
+                        <i data-lucide="star" class="w-4 h-4"></i>
+                        <span class="text-xs font-bold tracking-widest uppercase">الحصاد</span>
+                    </div>
+                    <h2 class="text-3xl font-light text-white leading-tight">سنة من الخيال</h2>
+                    <p class="text-zinc-400 font-light leading-loose text-lg">
+                        يا لها من سنة! كانت مليئة بالتفاصيل الحلوة التي لا تنسى. كل يوم مر معكِ كان يثبت لي كم أنا محظوظ. سنة كاملة من الضحك، والدفء، والمشاعر الحقيقية. ببساطة، كانت أحلى سنة بحياتي لأنكِ كنتِ الجزء الأكبر منها.
+                    </p>
+                </div>
+            </div>
 
-          </div>
         </div>
-      </section>
+    </section>
 
-      {/* Footer */}
-      <footer className="py-12 text-center border-t border-white/5 bg-black">
-        <p className="text-zinc-700 text-xs tracking-[0.2em] uppercase">
-          Designed by Qaes ai for Rahaf
+    <!-- Countdown / Reveal Section -->
+    <section class="min-h-[80vh] flex flex-col justify-center items-center px-6 relative overflow-hidden">
+        <!-- Background Grid -->
+        <div class="absolute inset-0" style="background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+        <div class="glass-panel p-8 md:p-16 max-w-2xl w-full relative border-t border-rose-900/30 shadow-2xl shadow-rose-900/10 transition-all duration-1000">
+            <div id="status-badge" class="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0a0a0a] px-4 py-1 border border-white/10 text-xs tracking-widest text-zinc-500 uppercase ltr-text">
+                Counting Down
+            </div>
+
+            <div class="text-center space-y-8 flex flex-col items-center justify-center min-h-[300px]">
+                
+                <!-- VIEW: COUNTDOWN -->
+                <div id="countdown-view" class="w-full">
+                    <div class="flex justify-center text-rose-600 mb-2 animate-pulse">
+                        <i data-lucide="clock" class="w-10 h-10" stroke-width="1"></i>
+                    </div>
+                    
+                    <h3 class="text-zinc-400 text-sm tracking-[0.3em] uppercase ltr-text">Waiting for Midnight</h3>
+                    
+                    <div class="flex items-end gap-4 md:gap-8 justify-center font-mono text-white mt-8 ltr-text">
+                        <div class="text-center">
+                            <span id="hours" class="text-4xl md:text-7xl font-light">00</span>
+                            <p class="text-xs text-zinc-600 mt-2 uppercase">Hours</p>
+                        </div>
+                        <span class="text-4xl md:text-7xl font-light text-rose-800 animate-pulse">:</span>
+                        <div class="text-center">
+                            <span id="minutes" class="text-4xl md:text-7xl font-light">00</span>
+                            <p class="text-xs text-zinc-600 mt-2 uppercase">Minutes</p>
+                        </div>
+                        <span class="text-4xl md:text-7xl font-light text-rose-800 animate-pulse">:</span>
+                        <div class="text-center">
+                            <span id="seconds" class="text-4xl md:text-7xl font-light text-rose-500">00</span>
+                            <p class="text-xs text-zinc-600 mt-2 uppercase">Seconds</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: EXPIRED / MESSAGE -->
+                <div id="message-view" class="hidden animate-in fade-in zoom-in duration-1000 w-full">
+                    <div class="flex justify-center text-yellow-500 mb-6">
+                        <i data-lucide="sparkles" class="w-12 h-12 animate-spin-slow" stroke-width="1"></i>
+                    </div>
+                    
+                    <h3 class="text-4xl md:text-6xl font-bold text-white tracking-wide leading-tight text-glow rtl-text">
+                        كل عام وانتِ
+                        <br />
+                        بألف خير يا رهف
+                    </h3>
+                    
+                    <p class="text-zinc-400 text-lg md:text-xl leading-relaxed max-w-md mx-auto mt-8 rtl-text">
+                        أتمنى لكِ سنة جديدة مليئة بالسعادة والحب والنجاح.
+                        <br />
+                        شكراً لأنكِ كنتِ أجمل جزء في سنتي الماضية،
+                        <br />
+                        وكل جزء في سنتي القادمة.
+                    </p>
+
+                    <div class="mt-12 inline-block border border-rose-500/30 px-6 py-2 rounded-full bg-rose-500/10">
+                        <p class="text-rose-400 font-handwriting text-xl italic ltr-text" style="font-family: cursive;">Love, Qaes</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 text-center border-t border-white/5 bg-black">
+        <p class="text-zinc-700 text-xs tracking-[0.2em] uppercase ltr-text">
+            Designed by Qaes ai for Rahaf
         </p>
-      </footer>
-    </div>
-  );
-};
+    </footer>
 
-export default RareEdition;
+    <!-- Logic Script -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Elements
+        const countdownView = document.getElementById('countdown-view');
+        const messageView = document.getElementById('message-view');
+        const statusBadge = document.getElementById('status-badge');
+        
+        const elHours = document.getElementById('hours');
+        const elMinutes = document.getElementById('minutes');
+        const elSeconds = document.getElementById('seconds');
+
+        // Logic
+        function showExpiredState() {
+            countdownView.classList.add('hidden');
+            messageView.classList.remove('hidden');
+            statusBadge.textContent = 'Special Message';
+        }
+
+        function formatTime(time) {
+            return String(time).padStart(2, '0');
+        }
+
+        // Main Execution
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Check if already opened
+            const alreadyOpened = localStorage.getItem('rahaf_gift_opened');
+            if (alreadyOpened === 'true') {
+                showExpiredState();
+                return;
+            }
+
+            // 2. Set Target Time (Midnight)
+            let targetTimestamp = localStorage.getItem('rahaf_target_time');
+
+            if (!targetTimestamp) {
+                // If no time saved, set it to next midnight
+                const targetDate = new Date();
+                targetDate.setHours(24, 0, 0, 0); 
+                // Uncomment line below to test (5 seconds)
+                // targetDate.setSeconds(targetDate.getSeconds() + 5); 
+                
+                targetTimestamp = targetDate.getTime();
+                localStorage.setItem('rahaf_target_time', targetTimestamp.toString());
+            } else {
+                targetTimestamp = parseInt(targetTimestamp);
+            }
+
+            // 3. Start Interval
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const difference = targetTimestamp - now;
+
+                if (difference <= 0) {
+                    clearInterval(interval);
+                    localStorage.setItem('rahaf_gift_opened', 'true');
+                    showExpiredState();
+                } else {
+                    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((difference / 1000 / 60) % 60);
+                    const seconds = Math.floor((difference / 1000) % 60);
+
+                    elHours.textContent = formatTime(hours);
+                    elMinutes.textContent = formatTime(minutes);
+                    elSeconds.textContent = formatTime(seconds);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
